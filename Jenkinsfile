@@ -23,7 +23,6 @@ stages {
   stage('push') {
     steps {
       sh '''
-      docker push tag notes-app:latest tokesh070/notes-app:latest
       docker push tokesh070/notes-app:latest
       '''
     }
