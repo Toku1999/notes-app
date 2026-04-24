@@ -13,15 +13,16 @@ stages {
       '''
     }
   }
- stage('Deploy') {
-  steps {
-    sh '''
-    docker ps -q --filter "publish=3000" | xargs -r docker stop
-    docker ps -aq --filter "publish=3000" | xargs -r docker rm
-    
-    ```
-    docker run -d -p 3000:3000 --name notes-app notes-app:latest
-    '''
+  stage('Deploy') {
+    steps {
+      sh '''
+      docker ps -q --filter "publish=3000" | xargs -r docker stop
+      docker ps -aq --filter "publish=3000" | xargs -r docker rm
+      
+      ```
+      docker run -d -p 3000:3000 --name notes-app notes-app:latest
+      '''
+    }
   }
 }
 }
