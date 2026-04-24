@@ -20,6 +20,14 @@ stages {
       }
     }
   }
+  stage('push') {
+    steps {
+      sh '''
+      docker push tag notes-app tokesh070/notes-app
+      docker push tokesh070/notes-app
+      '''
+    }
+  } 
   stage('Deploy') {
     steps {
     sh '''
