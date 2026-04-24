@@ -30,10 +30,10 @@ stages {
   stage('Deploy') {
     steps {
     sh '''
-    docker ps -q --filter "publish=3000" | xargs -r docker stop
-    docker ps -aq --filter "publish=3000" | xargs -r docker rm
-    
-    docker run -d -p 3000:3000 --name notes-app notes-app:latest
+    docker stop notes-app || true
+    docker rm notes-app || true
+    docker pull tokesh070/notes-app:latest
+    docker run -d -p 3000:3000 --name notes-app tokesh070/notes-app:latest
     '''
     }
  }
