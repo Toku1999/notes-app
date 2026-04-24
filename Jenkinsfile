@@ -1,24 +1,24 @@
 pipeline {
 agent any
 stages {
-  stage('clone') {
+  stage('Clone') {
     steps {
       git branch:'main', url: 'https://github.com/Toku1999/notes-app.git'
     }
   }
-  stage('build') {
+  stage('Build') {
     steps {
       sh'''
-      docker build -t notes-app .
+      docker build -t notes-app:latest .
       '''
     }
   }
-  stage('deploy') {
+  stage('Deploy') {
     steps {
       sh '''
       docker stop notes-app || true
       docker rm notes-app || true
-      docker run -p 3000:3000 --name notes-app notes-app
+      docker run -d -p 3000:3000 --name notes-app notes-app
       '''
     }
   }
