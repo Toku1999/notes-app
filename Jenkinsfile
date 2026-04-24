@@ -22,7 +22,6 @@ stages {
     ```
     docker run -d -p 3000:3000 --name notes-app notes-app:latest
     '''
-    ```
   }
 }
 }
