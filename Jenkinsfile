@@ -9,7 +9,7 @@ stages {
   stage('Build') {
     steps {
       sh'''
-      docker build -t notes-app:latest .
+      docker build -t tokesh070/notes-app:latest .
       '''
     }
   }
