@@ -33,7 +33,9 @@ pipeline {
     stage('Deploy') {
       steps {
       sh '''
+      echo "Deploying to Kubernetes..."
       kubectl set image deployment/notes-app notes-app=tokesh070/notes-app:$BUILD_NUMBER
+      kubectl rollout status deployment/notes-app
       '''
       }
    }
