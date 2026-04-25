@@ -33,10 +33,8 @@ pipeline {
     stage('Deploy') {
       steps {
       sh '''
-      docker stop notes-app || true
-      docker rm notes-app || true
-      docker pull $IMAGE_NAME
-      docker run -d -p 3000:3000 --name notes-app $IMAGE_NAME
+      sed -i "s|IMAGE_TAG|$BUILD_NUMBER|g" deployment.yaml
+      kubectl apply -f deployment.yaml
       '''
       }
    }
