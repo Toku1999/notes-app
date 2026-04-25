@@ -33,8 +33,7 @@ pipeline {
     stage('Deploy') {
       steps {
       sh '''
-      sed -i "s|IMAGE_TAG|$BUILD_NUMBER|g" deployment.yaml
-      kubectl apply -f deployment.yaml
+      kubectl set image deployment/notes-app notes-app=tokesh070/notes-app:$BUILD_NUMBER
       '''
       }
    }
