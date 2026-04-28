@@ -4,7 +4,7 @@ const notesRoutes = require('./routes/notes');
 
 app.use(express.json());
 
-// 🟢 UI Route
+// UI Route
 app.get('/', (req, res) => {
   res.send(`
     <html>
@@ -56,7 +56,7 @@ app.get('/', (req, res) => {
 
             data.forEach(note => {
               const li = document.createElement('li');
-              li.innerText = note.note;
+              li.innerText = note.text; // ✅ FIXED (was note.note)
               list.appendChild(li);
             });
           }
@@ -66,9 +66,12 @@ app.get('/', (req, res) => {
   `);
 });
 
+// API routes
 app.use('/notes', notesRoutes);
 
 const PORT = 3000;
+
+// ✅ FIXED (no backslash issue)
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(\`Server running on port \${PORT}\`);
+  console.log(`Server running on port ${PORT}`);
 });
