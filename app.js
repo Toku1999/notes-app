@@ -4,7 +4,7 @@ const notesRoutes = require('./routes/notes');
 
 app.use(express.json());
 
-// UI Route
+// 🌐 UI Route (Modern UI)
 app.get('/', (req, res) => {
   res.send(`
     <html>
@@ -12,38 +12,86 @@ app.get('/', (req, res) => {
         <title>Notes App</title>
         <style>
           body {
-            font-family: Arial;
-            background: #f4f4f4;
-            text-align: center;
-            padding: 50px;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
           }
-          h1 {
-            color: #333;
-          }
-          .box {
+
+          .container {
             background: white;
-            padding: 20px;
-            margin: auto;
-            width: 300px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            width: 400px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
           }
-          button {
+
+          h1 {
+            text-align: center;
+            margin-bottom: 20px;
+          }
+
+          input {
+            width: 100%;
             padding: 10px;
-            background: #007bff;
-            color: white;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+          }
+
+          button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
             border: none;
             border-radius: 5px;
+            background: #667eea;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+          }
+
+          button:hover {
+            background: #5a67d8;
+          }
+
+          ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+          }
+
+          li {
+            background: #f4f4f4;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
+
+          .delete {
+            background: red;
+            padding: 5px 10px;
+            border-radius: 5px;
+            color: white;
             cursor: pointer;
           }
         </style>
       </head>
+
       <body>
-        <div class="box">
+        <div class="container">
           <h1>📝 Notes App</h1>
-          <p>Welcome to your DevOps Notes App 🚀</p>
-          <button onclick="loadNotes()">Load Notes</button>
-          <ul id="notes"></ul>
+
+          <input type="text" id="noteInput" placeholder="Enter note..." />
+          <button onclick="addNote()">Add Note</button>
+
+          <ul id="notesList"></ul>
         </div>
 
         <script>
@@ -51,27 +99,55 @@ app.get('/', (req, res) => {
             const res = await fetch('/notes');
             const data = await res.json();
 
-            const list = document.getElementById('notes');
+            const list = document.getElementById('notesList');
             list.innerHTML = '';
 
             data.forEach(note => {
               const li = document.createElement('li');
-              li.innerText = note.text; // ✅ FIXED (was note.note)
+              li.innerHTML = \`
+                \${note.text}
+                <span class="delete" onclick="deleteNote(\${note.id})">X</span>
+              \`;
               list.appendChild(li);
             });
           }
+
+          async function addNote() {
+            const input = document.getElementById('noteInput');
+            const text = input.value;
+
+            if (!text) return;
+
+            await fetch('/notes', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ text })
+            });
+
+            input.value = '';
+            loadNotes();
+          }
+
+          async function deleteNote(id) {
+            await fetch('/notes/' + id, {
+              method: 'DELETE'
+            });
+
+            loadNotes();
+          }
+
+          loadNotes();
         </script>
       </body>
     </html>
   `);
 });
 
-// API routes
+// 📡 API Routes
 app.use('/notes', notesRoutes);
 
+// 🚀 Server Start
 const PORT = 3000;
-
-// ✅ FIXED (no backslash issue)
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
 });
