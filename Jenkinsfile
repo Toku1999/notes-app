@@ -33,9 +33,11 @@ pipeline {
     stage('Deploy') {
       steps {
       sh '''
-      echo "Deploying to Kubernetes..."
-      kubectl set image deployment/notes-app notes-app=tokesh070/notes-app:$BUILD_NUMBER
-      kubectl rollout status deployment/notes-app
+      echo "Deploying to EC2 with Docker..."
+      docker pull $IMAGE_NAME
+      docker stop notes-app || true
+      docker rm notes-app || true
+      docker run -d -p 3000:3000 --name notes-app $IMAGE_NAME
       '''
       }
    }
