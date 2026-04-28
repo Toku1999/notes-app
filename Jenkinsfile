@@ -1,7 +1,7 @@
 pipeline {
   agent any
   environment {
-      IMAGE_NAME = "tokesh070/notes-app:latest
+      IMAGE_NAME = "tokesh070/notes-app:latest"
   }
   stages {
     stage('Clone') {
